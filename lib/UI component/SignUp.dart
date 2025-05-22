@@ -9,7 +9,7 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
       child: Column(
         children: [
           Container(
-            child: Text("Hello World "),
+            child: Text("Hello "),
           )
         ],
       ),
