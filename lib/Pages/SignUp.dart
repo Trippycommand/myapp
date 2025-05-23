@@ -8,7 +8,9 @@ class HomePage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: const CustomAppBar()
+      backgroundColor: Colors.white,
+      body:  SafeArea(child: SignUpUI())
+      
     );
   }
 }
