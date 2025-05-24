@@ -37,18 +37,21 @@ class SignUpUI extends StatelessWidget implements PreferredSizeWidget {
                   controller: nameController,
                 ),
                 CustomTextField(label: "Password", controller: passController),
-                Align(
-                  alignment: Alignment.centerLeft,
-                  child: GestureDetector(
-                    onTap: () {
-                      // TODO: Add your forgot password logic here
-                      print("Forgot Password tapped!");
-                    },
-                    child: CustomText(
-                      text: "Forgot Password ?",
-                      color: const Color.fromARGB(255, 3, 229, 157),
-                      textAlign: TextAlign.left,
-                      fontWeight: FontWeight.w500,
+                Padding(
+                  padding: const EdgeInsets.only(left: 20,bottom: 10,top: 5),
+                  child: Align(
+                    alignment: Alignment.centerLeft,
+                    child: GestureDetector(
+                      onTap: () {
+                        // TODO: Add your forgot password logic here
+                        print("Forgot Password tapped!");
+                      },
+                      child: CustomText(
+                        text: "Forgot Password ?",
+                        color: const Color.fromARGB(255, 3, 229, 157),
+                        textAlign: TextAlign.left,
+                        fontWeight: FontWeight.w500,
+                      ),
                     ),
                   ),
                 ),
