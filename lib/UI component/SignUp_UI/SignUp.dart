@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:myapp/UI%20component/Button.dart';
-import 'package:myapp/UI%20component/SignUp_page_upper_part.dart';
+import 'package:myapp/UI%20component/SignUp_UI/SignUp_page_upper_part.dart';
 import 'package:myapp/UI%20component/Text.dart' show CustomText;
 import 'package:myapp/UI%20component/Textfeild.dart';
 import 'package:animated_text_kit/animated_text_kit.dart';
@@ -74,7 +74,9 @@ class SignUpUI extends StatelessWidget implements PreferredSizeWidget {
                   margin: EdgeInsets.only(left: 20, right: 20),
                   child: CustomButton(
                     label: "Login",
-                    onPressed: () {},
+                    onPressed: () {
+                      print("Login sucessful");
+                    },
                     height: 50,
                     width: screenwitdh,
                     textColor: Colors.black,
