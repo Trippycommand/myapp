@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:myapp/UI%20component/Button.dart';
-import 'package:myapp/UI%20component/SignUp_UI/SignUp_page_upper_part.dart';
+import 'package:myapp/UI%20component/Login/SignUp_page_upper_part.dart';
 import 'package:myapp/UI%20component/Text.dart' show CustomText;
 import 'package:myapp/UI%20component/Textfeild.dart';
 import 'package:animated_text_kit/animated_text_kit.dart';
