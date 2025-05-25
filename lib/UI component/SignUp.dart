@@ -20,8 +20,22 @@ class SignUpUI extends StatelessWidget implements PreferredSizeWidget {
           AnimatedTextKit(
             animatedTexts: [
               TypewriterAnimatedText(
-                'Welcome to Flutter!',
+                'Welcome to PayTrack',
                 speed: const Duration(milliseconds: 100),
+                textStyle: TextStyle(
+                  fontSize: 20,
+                  fontWeight: FontWeight.w600,
+                  color: const Color.fromARGB(255, 13, 236, 210),
+                  letterSpacing: 1.2,
+                  wordSpacing: 1, // Use a custom font if available
+                  shadows: [
+                    Shadow(
+                      blurRadius: 4,
+                      color: const Color.fromARGB(255, 116, 96, 96).withOpacity(0.1),
+                      offset: Offset(2, 2),
+                    ),
+                  ],
+                ),
               ),
             ],
             repeatForever: true,
@@ -38,7 +52,7 @@ class SignUpUI extends StatelessWidget implements PreferredSizeWidget {
                 ),
                 CustomTextField(label: "Password", controller: passController),
                 Padding(
-                  padding: const EdgeInsets.only(left: 20,bottom: 10,top: 5),
+                  padding: const EdgeInsets.only(left: 20, bottom: 10, top: 5),
                   child: Align(
                     alignment: Alignment.centerLeft,
                     child: GestureDetector(
