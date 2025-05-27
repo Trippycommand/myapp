@@ -22,7 +22,7 @@ class CustomTextField extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
+      padding: const EdgeInsets.only(top: 12,left: 10,right: 10),
       child: TextField(
         controller: controller,
         obscureText: obscureText,
@@ -36,7 +36,7 @@ class CustomTextField extends StatelessWidget {
           fillColor: backgroundColor,
           labelText: label,
           border: OutlineInputBorder(
-            borderRadius: BorderRadius.circular(15),
+            borderRadius: BorderRadius.circular(20),
           ),
         ),
       ),

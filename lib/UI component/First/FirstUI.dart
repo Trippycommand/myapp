@@ -1,22 +1,48 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:myapp/Pages/SignUp.dart';
 import 'package:myapp/UI%20component/Templates/Button.dart';
 import 'package:myapp/UI%20component/Templates/Text.dart';
 import 'package:myapp/UI%20component/Templates/Textfeild.dart';
 
-class FirstUI extends StatelessWidget {
+class FirstUI extends StatefulWidget {
   FirstUI({super.key});
 
-  final TextEditingController nameController = TextEditingController();
-
   @override
+  State<FirstUI> createState() => _FirstUIState();
+}
+
+class _FirstUIState extends State<FirstUI> {
+  final TextEditingController nameController = TextEditingController();
+  final TextEditingController emailController = TextEditingController();
+  final TextEditingController passwordController = TextEditingController();
+  final TextEditingController conPasswordController = TextEditingController();
+
+
+
+  Future<void> createUserWithEmailAndPassword() async {
+    try{
+      final userCredential = await FirebaseAuth.instance.createUserWithEmailAndPassword(
+        email: emailController.text.trim(),
+        password: passwordController.text.trim(),
+      );
+      print(UserCredential);
+    }catch(e){
+      print(e);
+    }
+}
   Widget build(BuildContext context) {
     final screenwitdh = MediaQuery.of(context).size.width;
     return Scaffold(
       backgroundColor: Color.fromARGB(180, 247, 252, 250),
       appBar: AppBar(
         backgroundColor: Color.fromARGB(180, 247, 252, 250),
-        title: Text("Sign Up"),
+        title: CustomText(
+          text: "SignUp",
+          color: Colors.black,
+          fontSize: 20,
+          fontWeight: FontWeight.bold,
+        ),
         titleTextStyle: TextStyle(fontWeight: FontWeight.bold),
         centerTitle: true, // <-- this will center the title
       ),
@@ -37,19 +63,19 @@ class FirstUI extends StatelessWidget {
               ),
               CustomTextField(
                 label: "Enter Email",
-                controller: nameController,
+                controller: emailController,
                 color: const Color(0xff479E7D),
                 backgroundColor: Color.fromARGB(180, 229, 245, 240),
               ),
               CustomTextField(
                 label: "Enter Password",
-                controller: nameController,
+                controller: passwordController,
                 color: const Color(0xff479E7D),
                 backgroundColor: Color.fromARGB(180, 229, 245, 240),
               ),
               CustomTextField(
                 label: "Confirm Password",
-                controller: nameController,
+                controller:conPasswordController ,
                 color: const Color(0xff479E7D),
                 backgroundColor: Color.fromARGB(180, 229, 245, 240),
               ),
@@ -57,9 +83,9 @@ class FirstUI extends StatelessWidget {
                 //For Button
                 margin: EdgeInsets.only(left: 20, right: 20),
                 child: CustomButton(
-                  label: "Login",
-                  onPressed: () {
-                    print("Login sucessful");
+                  label: "Sign In",
+                  onPressed: () async {
+                    await createUserWithEmailAndPassword();
                   },
                   height: 50,
                   width: screenwitdh,
@@ -94,3 +120,7 @@ class FirstUI extends StatelessWidget {
     );
   }
 }
+
+
+
+
