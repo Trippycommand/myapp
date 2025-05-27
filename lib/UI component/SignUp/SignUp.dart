@@ -55,11 +55,13 @@ class SignUpUI extends StatelessWidget implements PreferredSizeWidget {
                   label: 'Enter Name',
                   controller: nameController,
                   color: const Color.fromARGB(255, 94, 200, 149),
+                  backgroundColor: Color.fromARGB(180, 229, 245, 240),
                 ),
                 CustomTextField(
                   label: "Password",
                   controller: passController,
                   color: const Color.fromARGB(255, 94, 200, 149),
+                  backgroundColor: Color.fromARGB(180, 229, 245, 240),
                 ),
                 Padding(
                   padding: const EdgeInsets.only(left: 20, bottom: 10, top: 5),

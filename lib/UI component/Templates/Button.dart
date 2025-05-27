@@ -57,9 +57,10 @@ class _CustomButtonState extends State<CustomButton> {
           onTapCancel: _onTapCancel,
           onTap: widget.onPressed,
           child: Container(
+            margin:EdgeInsets.only(top: 10),
             decoration: BoxDecoration(
               color: widget.color,
-              borderRadius: BorderRadius.circular(12),
+              borderRadius: BorderRadius.circular(20),
               boxShadow: [
                 BoxShadow(
                   color: Colors.black.withOpacity(0.1),

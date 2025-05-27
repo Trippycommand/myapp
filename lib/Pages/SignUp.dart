@@ -13,7 +13,7 @@ class _HomePageState extends State<HomePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.white,
+      backgroundColor:Color.fromARGB(180, 247, 252, 250),
       body:  SafeArea(child: SignUpUI())
       
     );
