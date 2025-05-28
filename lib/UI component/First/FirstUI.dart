@@ -6,113 +6,150 @@ import 'package:myapp/UI%20component/Templates/Text.dart';
 import 'package:myapp/UI%20component/Templates/Textfeild.dart';
 
 class FirstUI extends StatefulWidget {
-  FirstUI({super.key});
+  const FirstUI({super.key});
 
   @override
   State<FirstUI> createState() => _FirstUIState();
 }
 
 class _FirstUIState extends State<FirstUI> {
+  final _formKey = GlobalKey<FormState>();
+
   final TextEditingController nameController = TextEditingController();
   final TextEditingController emailController = TextEditingController();
   final TextEditingController passwordController = TextEditingController();
   final TextEditingController conPasswordController = TextEditingController();
 
-
+  bool _isLoading = false;
 
   Future<void> createUserWithEmailAndPassword() async {
-    try{
-      final userCredential = await FirebaseAuth.instance.createUserWithEmailAndPassword(
+    setState(() => _isLoading = true);
+    try {
+      final UserCredential userCredential =await FirebaseAuth.instance.createUserWithEmailAndPassword(
         email: emailController.text.trim(),
         password: passwordController.text.trim(),
       );
-      print(UserCredential);
-    }catch(e){
-      print(e);
+       await userCredential.user?.updateDisplayName(nameController.text.trim());
+
+      if (!mounted) return;
+
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text("Sign Up successful!"),
+          backgroundColor: Colors.green,
+        ),
+      );
+    } on FirebaseAuthException catch (e) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text(e.message ?? "An error occurred"),
+          backgroundColor: Colors.red,
+        ),
+      );
+    } catch (_) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text("An unexpected error occurred"),
+          backgroundColor: Colors.red,
+        ),
+      );
+    } finally {
+      setState(() => _isLoading = false);
     }
-}
+  }
+
+  @override
   Widget build(BuildContext context) {
-    final screenwitdh = MediaQuery.of(context).size.width;
+    final screenWidth = MediaQuery.of(context).size.width;
+
     return Scaffold(
-      backgroundColor: Color.fromARGB(180, 247, 252, 250),
+      backgroundColor: const Color.fromARGB(180, 247, 252, 250),
       appBar: AppBar(
-        backgroundColor: Color.fromARGB(180, 247, 252, 250),
-        title: CustomText(
-          text: "SignUp",
+        backgroundColor: const Color.fromARGB(180, 247, 252, 250),
+        title: const CustomText(
+          text: "Sign Up",
           color: Colors.black,
           fontSize: 20,
           fontWeight: FontWeight.bold,
         ),
-        titleTextStyle: TextStyle(fontWeight: FontWeight.bold),
-        centerTitle: true, // <-- this will center the title
+        centerTitle: true,
+        elevation: 0,
       ),
-      body: Padding(
-        padding: EdgeInsets.only(
-          left: screenwitdh * 0.03,
-          right: screenwitdh * 0.03,
-        ),
-        child: SingleChildScrollView(
-          physics: BouncingScrollPhysics(),
+      body: SingleChildScrollView(
+        padding: EdgeInsets.symmetric(horizontal: screenWidth * 0.05),
+        physics: const BouncingScrollPhysics(),
+        child: Form(
+          key: _formKey,
           child: Column(
             children: [
+              const SizedBox(height: 20),
               CustomTextField(
                 label: "Enter Name",
                 controller: nameController,
                 color: const Color(0xff479E7D),
-                backgroundColor: Color.fromARGB(180, 229, 245, 240),
+                backgroundColor: const Color.fromARGB(180, 229, 245, 240),
               ),
               CustomTextField(
                 label: "Enter Email",
                 controller: emailController,
                 color: const Color(0xff479E7D),
-                backgroundColor: Color.fromARGB(180, 229, 245, 240),
+                backgroundColor: const Color.fromARGB(180, 229, 245, 240),
               ),
               CustomTextField(
                 label: "Enter Password",
                 controller: passwordController,
                 color: const Color(0xff479E7D),
-                backgroundColor: Color.fromARGB(180, 229, 245, 240),
+                backgroundColor: const Color.fromARGB(180, 229, 245, 240),
+                obscureText: true,
               ),
               CustomTextField(
                 label: "Confirm Password",
-                controller:conPasswordController ,
+                controller: conPasswordController,
                 color: const Color(0xff479E7D),
-                backgroundColor: Color.fromARGB(180, 229, 245, 240),
+                backgroundColor: const Color.fromARGB(180, 229, 245, 240),
+                obscureText: true,
               ),
+              const SizedBox(height: 20),
               Container(
-                //For Button
-                margin: EdgeInsets.only(left: 20, right: 20),
-                child: CustomButton(
-                  label: "Sign In",
-                  onPressed: () async {
-                    await createUserWithEmailAndPassword();
-                  },
-                  height: 50,
-                  width: screenwitdh,
-                  textColor: Colors.black,
-                  color: const Color.fromARGB(255, 3, 229, 157),
+                margin: const EdgeInsets.symmetric(horizontal: 20),
+                child: _isLoading
+                    ? const CircularProgressIndicator()
+                    : CustomButton(
+                        label: "Sign Up",
+                        onPressed: () async {
+                          if (passwordController.text.trim() !=
+                              conPasswordController.text.trim()) {
+                            ScaffoldMessenger.of(context).showSnackBar(
+                              const SnackBar(
+                                content: Text("Passwords do not match"),
+                                backgroundColor: Colors.red,
+                              ),
+                            );
+                            return;
+                          }
+                          await createUserWithEmailAndPassword();
+                        },
+                        height: 50,
+                        width: screenWidth,
+                        textColor: Colors.black,
+                        color: const Color.fromARGB(255, 3, 229, 157),
+                      ),
+              ),
+              const SizedBox(height: 20),
+              GestureDetector(
+                onTap: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (_) => const HomePage()),
+                  );
+                },
+                child: const CustomText(
+                  text: "Already have an account? Sign In",
+                  color: Color.fromARGB(255, 3, 229, 157),
+                  fontWeight: FontWeight.w500,
                 ),
               ),
-              Padding(
-                padding: const EdgeInsets.only(left: 20, bottom: 10, top: 15),
-                child: Align(
-                  alignment: Alignment.centerLeft,
-                  child: GestureDetector(
-                    onTap: () {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(builder: (Context) => HomePage()),
-                      );
-                    },
-                    child: CustomText(
-                      text: "Already have an account ? Sign In ",
-                      color: const Color.fromARGB(255, 3, 229, 157),
-                      textAlign: TextAlign.left,
-                      fontWeight: FontWeight.w500,
-                    ),
-                  ),
-                ),
-              ),
+              const SizedBox(height: 20),
             ],
           ),
         ),
@@ -120,7 +157,3 @@ class _FirstUIState extends State<FirstUI> {
     );
   }
 }
-
-
-
-
