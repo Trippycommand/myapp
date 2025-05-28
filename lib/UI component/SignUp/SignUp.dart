@@ -23,6 +23,7 @@ class _SignUpUIState extends State<SignUpUI> {
 
   Future<void> loginUser() async {
     try {
+      // ignore: unused_local_variable
       final userCredential= FirebaseAuth.instance.signInWithEmailAndPassword(
         email: emailController.text.trim(),
         password: passController.text.trim(),

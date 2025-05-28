@@ -35,6 +35,7 @@ class _FirstUIState extends State<FirstUI> {
 
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(
+          behavior: SnackBarBehavior.floating,
           content: Text("Sign Up successful!"),
           backgroundColor: Colors.green,
         ),
@@ -49,6 +50,7 @@ class _FirstUIState extends State<FirstUI> {
     } catch (_) {
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(
+          behavior: SnackBarBehavior.floating,
           content: Text("An unexpected error occurred"),
           backgroundColor: Colors.red,
         ),
