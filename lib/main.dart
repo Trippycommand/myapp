@@ -1,9 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:myapp/Pages/StartUp.dart';
 import 'package:myapp/Pages/HomePage.dart';
 import 'firebase_options.dart';
+import 'package:google_fonts/google_fonts.dart';
+
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -20,6 +23,9 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
+      theme: ThemeData(
+        textTheme: GoogleFonts.manropeTextTheme()
+      ),
       home: FirebaseAuth.instance.currentUser != null
           ? const HomePage()
           : const First(),
