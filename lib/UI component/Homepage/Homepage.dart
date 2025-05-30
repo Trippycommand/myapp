@@ -1,40 +1,77 @@
-import 'package:firebase_auth/firebase_auth.dart';
-import 'package:flutter/material.dart';
-import 'package:myapp/UI%20component/Homepage/appbar.dart';
+  import 'package:cloud_firestore/cloud_firestore.dart';
+  import 'package:flutter/material.dart';
+  import 'package:myapp/UI%20component/Homepage/AddTransactionbutton.dart';
+  import 'package:myapp/UI%20component/Homepage/appbar.dart';
 
-class HomePageUI extends StatefulWidget {
-  const HomePageUI({super.key});
+  class HomePageUI extends StatelessWidget {
+    final String fixedUID = 'qkIThgX4FqafhY5aeRIA';
 
-  @override
-  State<HomePageUI> createState() => _HomePageUIState();
-}
+    HomePageUI({super.key});
 
-class _HomePageUIState extends State<HomePageUI> {
- String? userName;// ✅ Define it here
+    @override
+    Widget build(BuildContext context) {
+      return Scaffold(
+        backgroundColor: const Color(0xffF7FCFA),
+        appBar: const HomePageAppBar(),
+        body: FutureBuilder<DocumentSnapshot<Map<String, dynamic>>>(
+          future:
+              FirebaseFirestore.instance.collection('User').doc(fixedUID).get(),
+          builder: (context, snapshot) {
+            if (snapshot.connectionState == ConnectionState.waiting) {
+              return const Center(child: CircularProgressIndicator());
+            }
+            if (snapshot.hasError) {
+              return Center(child: Text("Error: ${snapshot.error}"));
+            }
+            if (!snapshot.hasData || !snapshot.data!.exists) {
+              return const Center(child: Text("No data found for this user."));
+            }
 
-  @override
-  void initState() {
-    super.initState();
-    final user = FirebaseAuth.instance.currentUser;
-    setState(() {
-      userName = user?.displayName ?? 'User';
-    });
-  }
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: Color(0xffF7FCFA),
-      appBar: const HomePageAppBar(),
-      body: Center(
-        child: Text(
-          "Welcome, $userName!",
-          style: const TextStyle(
-            fontSize: 24,
-            fontWeight: FontWeight.bold,
-            color: Colors.teal,
-          ),
+            final data = snapshot.data!.data();
+            // Extract numeric total income
+            final totatIncome = data?['totatIncome'];
+
+            return Column(
+              children: [
+                Align(
+                  alignment: Alignment.topLeft,
+                  child: Padding(
+                    padding: EdgeInsets.only(
+                      left: 20,
+                      top: 20,
+                    ), // add some padding from edges
+                    child: Text(
+                      totatIncome != null ? '₹$totatIncome' : '',
+                      style: const TextStyle(
+                        fontSize: 18,
+                        fontWeight: FontWeight.bold,
+                        //
+                      ),
+                    ),
+                  ),
+                ),
+                Align(
+                  alignment: Alignment.topLeft,
+                  child: Padding(
+                    padding: EdgeInsets.only(left: 20,top: 4),
+                    child: Text(
+                      "Current Balance",
+                      style: TextStyle(
+                        color: Color(0xff479E7D),
+                        fontSize: 14,
+                        fontWeight: FontWeight.normal,
+                      ),
+                    ),
+                  ),
+                ),
+                Align(
+                  alignment: Alignment.topLeft,
+                  child: Addtransactionbutton(),
+                )
+              ],
+            );
+          },
         ),
-      ),
-    );
+      );
+    }
   }
-}

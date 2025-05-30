@@ -4,9 +4,10 @@ import 'package:myapp/UI%20component/Homepage/leadingAppBar.dart';
 
 class HomePageAppBar extends StatelessWidget implements PreferredSizeWidget {
   const HomePageAppBar({super.key});
+  
 
   @override
-  Size get preferredSize => const Size.fromHeight(80);
+  Size get preferredSize => const Size.fromHeight(50);
   @override
   Widget build(BuildContext context) {
     final user = FirebaseAuth.instance.currentUser;
