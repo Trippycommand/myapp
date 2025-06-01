@@ -9,7 +9,7 @@ import 'package:myapp/UI%20component/Templates/Button.dart';
 class HomePageUI extends StatelessWidget {
   final String fixedUID = 'qkIThgX4FqafhY5aeRIA';
 
-  HomePageUI({super.key});
+  const HomePageUI({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -145,8 +145,9 @@ class HomePageUI extends StatelessWidget {
                         final data = recentExpenses[index].data();
                         final amount = data['amount']?.toString() ?? '0';
                         final category = data['category'] ?? 'Unknown';
+                        final description = data['description'] ?? 'Unknown';
 
-                        return ExpenseCard(category: category, amount: amount);
+                        return ExpenseCard(category: category, amount: amount,description: description);
                       },
                     ),
                     Padding(

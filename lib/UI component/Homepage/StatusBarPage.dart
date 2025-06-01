@@ -58,7 +58,7 @@ class StatusBarPage extends StatelessWidget {
                         color: Colors.red,
                         value: totalExpense.toDouble(),
                         title: 'Spent',
-                        radius: 50,
+                        radius: 30,
                         titleStyle: const TextStyle(
                           fontSize: 14,
                           fontWeight: FontWeight.bold,
@@ -69,7 +69,7 @@ class StatusBarPage extends StatelessWidget {
                         color: Colors.green,
                         value: currentBalance.toDouble(),
                         title: 'Remaining',
-                        radius: 50,
+                        radius: 30,
                         titleStyle: const TextStyle(
                           fontSize: 14,
                           fontWeight: FontWeight.bold,

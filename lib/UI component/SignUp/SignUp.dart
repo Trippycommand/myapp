@@ -8,7 +8,7 @@ import 'package:animated_text_kit/animated_text_kit.dart';
 import 'package:myapp/Pages/HomePage.dart'; // Make sure this path is correct
 
 class SignUpUI extends StatefulWidget implements PreferredSizeWidget {
-  SignUpUI({super.key});
+  const SignUpUI({super.key});
 
   @override
   State<SignUpUI> createState() => _SignUpUIState();

@@ -18,3 +18,4 @@ Added the Home page and updated the UI
 
 nothing today
 Major Update 
+Reaserched about LLM 
