@@ -1,5 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:myapp/Pages/Transaction.dart';
 import 'package:myapp/UI%20component/Homepage/AddTransactionbutton.dart';
 import 'package:myapp/UI%20component/Homepage/ExpenseCard.dart';
 import 'package:myapp/UI%20component/Homepage/StatusBarPage.dart';
@@ -17,7 +18,8 @@ class HomePageUI extends StatelessWidget {
       backgroundColor: const Color(0xffF7FCFA),
       appBar: const HomePageAppBar(),
       body: FutureBuilder<DocumentSnapshot<Map<String, dynamic>>>(
-        future: FirebaseFirestore.instance.collection('User').doc(fixedUID).get(),
+        future:
+            FirebaseFirestore.instance.collection('User').doc(fixedUID).get(),
         builder: (context, snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting) {
             return const Center(child: CircularProgressIndicator());
@@ -33,12 +35,13 @@ class HomePageUI extends StatelessWidget {
           final totalIncome = (userData?['totatIncome'] ?? 0) as num;
 
           return FutureBuilder<QuerySnapshot<Map<String, dynamic>>>(
-            future: FirebaseFirestore.instance
-                .collection('User')
-                .doc(fixedUID)
-                .collection('expenses')
-                .orderBy('date', descending: true)
-                .get(),
+            future:
+                FirebaseFirestore.instance
+                    .collection('User')
+                    .doc(fixedUID)
+                    .collection('expenses')
+                    .orderBy('date', descending: true)
+                    .get(),
             builder: (context, expenseSnapshot) {
               if (expenseSnapshot.connectionState == ConnectionState.waiting) {
                 return const Center(child: CircularProgressIndicator());
@@ -58,7 +61,8 @@ class HomePageUI extends StatelessWidget {
 
               final currentBalance = totalIncome.toInt() - totalExpense;
               final recentExpenses = expenses.take(3).toList();
-              final percentSpent = totalIncome > 0 ? totalExpense / totalIncome : 0.0;
+              final percentSpent =
+                  totalIncome > 0 ? totalExpense / totalIncome : 0.0;
 
               return SingleChildScrollView(
                 padding: const EdgeInsets.only(bottom: 20),
@@ -77,10 +81,16 @@ class HomePageUI extends StatelessWidget {
                       ),
                     ),
                     const Padding(
-                      padding: EdgeInsets.symmetric(horizontal: 20, vertical: 4),
+                      padding: EdgeInsets.symmetric(
+                        horizontal: 20,
+                        vertical: 4,
+                      ),
                       child: Text(
                         "Current Balance",
-                        style: TextStyle(color: Color(0xff479E7D), fontSize: 14),
+                        style: TextStyle(
+                          color: Color(0xff479E7D),
+                          fontSize: 14,
+                        ),
                       ),
                     ),
                     const Padding(
@@ -95,10 +105,11 @@ class HomePageUI extends StatelessWidget {
                           Navigator.push(
                             context,
                             MaterialPageRoute(
-                              builder: (_) => StatusBarPage(
-                                totalIncome: totalIncome.toInt(),
-                                totalExpense: totalExpense,
-                              ),
+                              builder:
+                                  (_) => StatusBarPage(
+                                    totalIncome: totalIncome.toInt(),
+                                    totalExpense: totalExpense,
+                                  ),
                             ),
                           );
                         },
@@ -147,7 +158,11 @@ class HomePageUI extends StatelessWidget {
                         final category = data['category'] ?? 'Unknown';
                         final description = data['description'] ?? 'Unknown';
 
-                        return ExpenseCard(category: category, amount: amount,description: description);
+                        return ExpenseCard(
+                          category: category,
+                          amount: amount,
+                          description: description,
+                        );
                       },
                     ),
                     Padding(
@@ -159,7 +174,14 @@ class HomePageUI extends StatelessWidget {
                         alignment: Alignment.centerRight,
                         child: CustomButton(
                           label: "See All",
-                          onPressed: () {},
+                          onPressed: () {
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) => TransactionPage(),
+                              ),
+                            );
+                          },
                           color: const Color(0xffE5F5F0),
                           textColor: Colors.black,
                           borderRadius: 12,
