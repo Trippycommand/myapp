@@ -3,7 +3,6 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:myapp/Pages/StartUp.dart';
-import 'package:myapp/Pages/HomePage.dart';
 import 'package:myapp/Pages/Transaction.dart';
 import 'firebase_options.dart';
 
