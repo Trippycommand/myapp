@@ -6,40 +6,45 @@ class Addtransactionbutton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final screenwitdh = MediaQuery.of(context).size.width;
-    final screenHeigh = MediaQuery.of(context).size.height;
+    final screenWidth = MediaQuery.of(context).size.width;
+
     return Padding(
-      padding: const EdgeInsets.only(top: 16.0, left: 20, right: 20),
+      padding: const EdgeInsets.only(
+        top: 16,
+        left: 20,
+        right: 20,
+      ),
+
       child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
+
           Expanded(
             child: CustomButton(
-              fontSize: 12,
-              borderRadius: 12,
-              height: 50,
-              width: screenwitdh * 0.5, 
-              color: Color(0xff05E38F),
-              textColor: const Color.fromARGB(255, 0, 0, 0),
-              label: "Add Income",
-              onPressed: () {
-                // Handle income button
-              },
+              height: 55,
+              width: screenWidth * 0.42,
+
+              color: Colors.transparent,
+              textColor: Colors.white,
+
+              label: "Add Expense",
+
+              onPressed: () {},
             ),
           ),
+
           const SizedBox(width: 16),
+
           Expanded(
             child: CustomButton(
-              fontSize: 12,
-              borderRadius: 12,
-              height: 50,
-              width: screenwitdh * 0.5, 
-              color: Color(0xffE5F5F0),
-              textColor: const Color.fromARGB(255, 0, 0, 0),
+              height: 55,
+              width: screenWidth * 0.42,
+
+              color: Colors.transparent,
+              textColor: Colors.white,
+
               label: "Add Income",
-              onPressed: () {
-                // Handle income button
-              },
+
+              onPressed: () {},
             ),
           ),
         ],

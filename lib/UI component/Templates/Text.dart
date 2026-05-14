@@ -1,35 +1,35 @@
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
+import 'package:myapp/core/theme/app_theme.dart';
 
 class CustomText extends StatelessWidget {
   final String text;
-  final Color color;
-  final double fontSize;
-  final TextAlign textAlign;
-  final FontWeight fontWeight;
-  final EdgeInsetsGeometry padding;
+  final Color? color;
+  final double? size;
+  final FontWeight? fontWeight;
+  final TextAlign? textAlign;
 
   const CustomText({
     super.key,
     required this.text,
-    this.color = Colors.black,
-    this.fontSize = 16,
-    this.textAlign = TextAlign.start,
-    this.fontWeight = FontWeight.normal,
-    this.padding = const EdgeInsets.all(0),
+    this.color,
+    this.size,
+    this.fontWeight,
+    this.textAlign,
   });
 
   @override
   Widget build(BuildContext context) {
-    return Padding(
-      padding: padding,
-      child: Text(
-        text,
-        textAlign: textAlign,
-        style: TextStyle(
-          color: color,
-          fontSize: fontSize,
-          fontWeight: fontWeight,
-        ),
+    return Text(
+      text,
+
+      textAlign: textAlign,
+
+      style: GoogleFonts.inter(
+        fontSize: size ?? 15,
+        fontWeight: fontWeight ?? FontWeight.w500,
+        color: color ?? AppColors.primary,
+        height: 1.4,
       ),
     );
   }

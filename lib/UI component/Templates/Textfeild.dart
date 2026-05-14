@@ -1,42 +1,78 @@
-
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
+import 'package:myapp/core/theme/app_theme.dart';
 
 class CustomTextField extends StatelessWidget {
   final String label;
   final TextEditingController controller;
-  final bool obscureText;
-  final TextInputType keyboardType;
   final Color color;
-   final Color backgroundColor;
+  final Color backgroundColor;
 
   const CustomTextField({
     super.key,
     required this.label,
     required this.controller,
-    this.obscureText = false,
-    this.keyboardType = TextInputType.text,
-    this.color = const Color.fromARGB(255, 0, 0, 0),
-    this.backgroundColor = Colors.white
+    required this.color,
+    required this.backgroundColor,
   });
 
   @override
   Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.only(top: 12,left: 10,right: 10),
+    return Container(
+      decoration: BoxDecoration(
+        color: Colors.white,
+        borderRadius: BorderRadius.circular(20),
+
+        boxShadow: [
+          BoxShadow(
+            color: Colors.black.withOpacity(0.04),
+            blurRadius: 12,
+            offset: const Offset(0, 6),
+          ),
+        ],
+      ),
+
       child: TextField(
         controller: controller,
-        obscureText: obscureText,
-        keyboardType: keyboardType,
+
+        style: GoogleFonts.inter(
+          fontSize: 15,
+          color: AppColors.primary,
+          fontWeight: FontWeight.w500,
+        ),
+
         decoration: InputDecoration(
-          labelStyle: TextStyle(
-            color: color,
-            fontFamily: "Arial"
+          hintText: label,
+
+          hintStyle: GoogleFonts.inter(
+            color: AppColors.neutral,
+            fontSize: 14,
           ),
+
           filled: true,
-          fillColor: backgroundColor,
-          labelText: label,
+          fillColor: Colors.white,
+
+          contentPadding: const EdgeInsets.symmetric(
+            horizontal: 20,
+            vertical: 20,
+          ),
+
           border: OutlineInputBorder(
             borderRadius: BorderRadius.circular(20),
+            borderSide: BorderSide.none,
+          ),
+
+          enabledBorder: OutlineInputBorder(
+            borderRadius: BorderRadius.circular(20),
+            borderSide: BorderSide.none,
+          ),
+
+          focusedBorder: OutlineInputBorder(
+            borderRadius: BorderRadius.circular(20),
+            borderSide: const BorderSide(
+              color: AppColors.primary,
+              width: 1.2,
+            ),
           ),
         ),
       ),
