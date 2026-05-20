@@ -7,9 +7,129 @@ import 'package:myapp/UI%20component/TransactionUI.dart/AddTransactionBottomShee
 import 'package:myapp/core/theme/app_theme.dart';
 import 'package:myapp/Pages/TransactionHistoryPage.dart';
 import 'package:myapp/UI%20component/Homepage/WeeklySpendingChart.dart';
+import 'package:myapp/UI component/VoiceAssistantBottomSheet.dart';
+import 'package:speech_to_text/speech_to_text.dart' as stt;
 
-class HomePageUI extends StatelessWidget {
+class HomePageUI extends StatefulWidget {
   const HomePageUI({super.key});
+
+  @override
+  State<HomePageUI> createState() => _HomePageUIState();
+}
+
+class _HomePageUIState extends State<HomePageUI> {
+  late stt.SpeechToText _speech;
+  bool _isListening = false;
+  String _spokenText = '';
+
+  @override
+  void initState() {
+    super.initState();
+    _speech = stt.SpeechToText();
+  }
+
+  void _listen() async {
+    if (!_isListening) {
+      bool available = await _speech.initialize(
+        onStatus: (status) {
+          print("STATUS: $status");
+        },
+        onError: (error) {
+          print("ERROR: $error");
+        },
+      );
+      if (available) {
+        setState(() => _isListening = true);
+
+        _speech.listen(
+          listenMode: stt.ListenMode.confirmation,
+          onResult: (result) {
+            print(result.recognizedWords);
+
+            setState(() {
+              _spokenText = result.recognizedWords;
+            });
+
+            if (result.finalResult) {
+              _processVoiceCommand(result.recognizedWords);
+            }
+          },
+        );
+      }
+    } else {
+      setState(() => _isListening = false);
+      _speech.stop();
+    }
+  }
+
+  Future<void> _processVoiceCommand(String text) async {
+    if (text.trim().isEmpty) {
+      ScaffoldMessenger.of(
+        context,
+      ).showSnackBar(const SnackBar(content: Text("Couldn't hear anything")));
+      return;
+    }
+
+    final lowerText = text.toLowerCase();
+
+    String type = "Expense";
+    String category = "Other";
+
+    if (lowerText.contains("salary")) {
+      type = "Income";
+      category = "Salary";
+    } else if (lowerText.contains("food")) {
+      category = "Food";
+    } else if (lowerText.contains("uber")) {
+      category = "Travel";
+    } else if (lowerText.contains("netflix")) {
+      category = "Entertainment";
+    }
+    String title = "Expense";
+
+    if (category == "Food") {
+      title = "Food Expense";
+    } else if (category == "Travel") {
+      title = "Uber Ride";
+    } else if (category == "Entertainment") {
+      title = "Netflix Subscription";
+    } else if (category == "Salary") {
+      title = "Monthly Salary";
+    }
+
+    final amountMatch = RegExp(r'\d+').firstMatch(text);
+
+    if (category == "Other") {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text("Couldn't understand transaction")),
+      );
+      return;
+    }
+
+    if (amountMatch != null) {
+      final amount = double.parse(amountMatch.group(0)!);
+
+      FirebaseFirestore.instance
+          .collection("users")
+          .doc(FirebaseAuth.instance.currentUser!.uid)
+          .collection("transactions")
+          .add({
+            "title": title,
+            "amount": amount,
+            "category": category,
+            "type": type,
+            "date": Timestamp.now(),
+          });
+
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text("$category transaction added successfully")),
+      );
+    } else {
+      ScaffoldMessenger.of(
+        context,
+      ).showSnackBar(const SnackBar(content: Text("Amount not detected")));
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -24,41 +144,87 @@ class HomePageUI extends StatelessWidget {
 
       appBar: const HomePageAppBar(),
 
-      floatingActionButton: GestureDetector(
-        onTap: () {
-          showModalBottomSheet(
-            context: context,
+      floatingActionButton: Row(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          // MIC BUTTON
+          GestureDetector(
+            onTap: () {
+              showModalBottomSheet(
+                context: context,
+                isScrollControlled: true,
+                backgroundColor: Colors.transparent,
+                builder:
+                    (_) => VoiceAssistantBottomSheet(
+                      speech: _speech,
+                      onResult: (text) async {
+                        setState(() {
+                          _spokenText = text;
+                        });
 
-            isScrollControlled: true,
-
-            backgroundColor: Colors.transparent,
-
-            builder: (_) => const AddTransactionBottomSheet(),
-          );
-        },
-
-        child: Container(
-          height: 68,
-          width: 68,
-
-          decoration: BoxDecoration(
-            color: AppColors.primary,
-
-            shape: BoxShape.circle,
-
-            boxShadow: [
-              BoxShadow(
-                color: Colors.black.withOpacity(0.12),
-
-                blurRadius: 20,
-
-                offset: const Offset(0, 10),
+                        await _processVoiceCommand(text);
+                      },
+                    ),
+              );
+            },
+            child: Container(
+              height: 64,
+              width: 64,
+              decoration: BoxDecoration(
+                shape: BoxShape.circle,
+                gradient: const LinearGradient(
+                  colors: [Color(0xff6366F1), Color(0xff8B5CF6)],
+                ),
+                boxShadow: [
+                  BoxShadow(
+                    color: Colors.black.withOpacity(0.15),
+                    blurRadius: 15,
+                    offset: const Offset(0, 8),
+                  ),
+                ],
               ),
-            ],
+              child: const Icon(
+                Icons.mic_rounded,
+                color: Colors.white,
+                size: 30,
+              ),
+            ),
           ),
 
-          child: const Icon(Icons.add_rounded, color: Colors.white, size: 34),
-        ),
+          const SizedBox(width: 20),
+
+          // EXISTING + BUTTON
+          GestureDetector(
+            onTap: () {
+              showModalBottomSheet(
+                context: context,
+                isScrollControlled: true,
+                backgroundColor: Colors.transparent,
+                builder: (_) => const AddTransactionBottomSheet(),
+              );
+            },
+            child: Container(
+              height: 68,
+              width: 68,
+              decoration: BoxDecoration(
+                color: AppColors.primary,
+                shape: BoxShape.circle,
+                boxShadow: [
+                  BoxShadow(
+                    color: Colors.black.withOpacity(0.12),
+                    blurRadius: 20,
+                    offset: const Offset(0, 10),
+                  ),
+                ],
+              ),
+              child: const Icon(
+                Icons.add_rounded,
+                color: Colors.white,
+                size: 34,
+              ),
+            ),
+          ),
+        ],
       ),
 
       floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
@@ -284,8 +450,6 @@ class HomePageUI extends StatelessWidget {
                                   ),
                                 ],
                               ),
-
-                              const SizedBox(height: 34),
 
                               Row(
                                 children: [
